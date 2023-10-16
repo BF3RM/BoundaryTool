@@ -1,0 +1,84 @@
+
+* {
+    font-family: 'Rajdhani', sans-serif !important;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+button {
+    font-size: 15px;
+    width: 160px;
+}
+
+input {
+    background: none;
+    border:none;
+    border-bottom: 1px solid #52c55b;
+    color: #ffffff;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: none;
+}
+input:focus-visible {
+
+}
+
+input::placeholder {
+    color: #ffffff;       
+}
+
+#map {
+    height: 100vh;
+    background-image: url('./header.png');
+    background-size: cover;
+}
+
+#map::after {
+    content: '';
+    background: url('./402107790_STATIC_NOISE_400.gif');
+    opacity: 0.1;
+    position: absolute;
+    background-size: 200px 200px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#inputs-container {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 10000;
+    background: rgba(0,0,0, .5);
+    transition: .5s;
+}
+
+#inputs-container > div {
+    width: 100%;
+}
+
+#minimize {
+    position: absolute;
+    right: -35px;
+    width: 15px;
+    height: 30px;
+    background: rgba(0,0,0, .5);
+    top: -20px;
+}
+
+#minimize:hover{
+    background: rgba(0,0,0, .4);
+}
