@@ -72,7 +72,9 @@
                 boundriesLayers = {};
             }
             map = L.map('map', {
-                crs: L.CRS.Simple
+                crs: L.CRS.Simple,
+                zoomDelta: 0.25,
+                zoomSnap: 0
             });
             map.options.minZoom = -2;
             const mapName = document.getElementById("mapName").value;
@@ -113,7 +115,8 @@
                     circlemarker: false,
                 },
                 edit: {
-                    featureGroup: drawnItems
+                    featureGroup: drawnItems,
+                    edit: false
                 }
             });
             map.addControl(drawControl)
@@ -181,7 +184,6 @@
                     }
                 });
             });
-            toggle();
         }
 
         function toggle() {
