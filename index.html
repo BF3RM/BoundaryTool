@@ -57,11 +57,12 @@
     <div id="map"></div>
 
     <script>
+        const _ = require('lodash'); // Import the Lodash library
         const fs = require('fs');
+        const path = require('path');
         var map;
         var boundriesLayers = {};
         var vecBoundries = {};
-
         function generateMap() {
             if (map) {
                 map.off();
@@ -169,9 +170,15 @@
                 };
             });
             map.on('draw:deleted', function (e) {
-                var layersIds = Object.keys(e.boundriesLayers['_layers']);
-                layersIds.forEach(id => {
-                    delete vecBoundries[id];
+                var layers = e.layers.getLayers();
+
+                layers.forEach(function (layer) {
+                    for (var layerId in boundriesLayers) {
+                        if (_.isEqual(boundriesLayers[layerId]['_latlngs'], layer['_latlngs'])) {
+                            delete boundriesLayers[layerId];
+                            delete vecBoundries[layerId];
+                        }
+                    }
                 });
             });
             toggle();
@@ -193,7 +200,12 @@
         function save() {
             const mapName = document.getElementById("mapName").value;
             const mapVersion = document.getElementById("mapVersion").value;
-            fs.writeFileSync(`./output/${mapName}_${mapVersion}.json`, JSON.stringify(vecBoundries, null, 2));
+            const dir = path.join(path.resolve('.'), 'output');
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+            }
+            fs.writeFileSync(path.join(dir, `${mapName}_${mapVersion}.json`), JSON.stringify(vecBoundries, null, 2));
+            Snackbar.show({ text: `file saved. see output folder`, textColor: '#ffffff', actionTextColor: 'green', pos: 'top-right' });
         }
 
         function uuidv4() {
