@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boundry editor</title>
+    <title>Boundary editor</title>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"
@@ -28,6 +28,9 @@
 </head>
 
 <body>
+    <div class="exit" onclick="exit()">
+        X
+    </div>
     <div id="inputs-container">
         <div style="position: relative;width: 100%;">
             <img src="./back.svg" id="minimize" onclick="toggle()">
@@ -49,7 +52,7 @@
             <input style="width: 50%;" id="centerY" type="text" placeholder="Y">
         </div>
         <div>
-            <button onclick="generateMap()">Upload</button>
+            <button onclick="generateMap()">Download</button>
             <button onclick="save()">Save Boundries</button>
         </div>
     </div>
@@ -57,12 +60,14 @@
     <div id="map"></div>
 
     <script>
-        const _ = require('lodash'); // Import the Lodash library
+        const { ipcRenderer } = require("electron");
+        const _ = require('lodash');
         const fs = require('fs');
         const path = require('path');
         var map;
         var boundriesLayers = {};
         var vecBoundries = {};
+        var redDotsMarkers = {};
         function generateMap() {
             if (map) {
                 map.off();
@@ -170,6 +175,17 @@
                         vecBoundries[layerId] = vecLatLan;
                         L.polygon(layer['_latlngs'][0]).addTo(drawnItems);
                     }
+                    var corners = layer.getLatLngs()[0];
+                    var redDotIcon = L.divIcon({
+                        className: 'red-dot',
+                        iconSize: [8, 8]
+                    });
+                    redDotsMarkers[layerId] = [];
+                    for (var i = 0; i < corners.length; i++) {
+                        var marker = L.marker(corners[i], { icon: redDotIcon });
+                        marker.addTo(map);
+                        redDotsMarkers[layerId].push(marker);
+                    }
                 };
             });
             map.on('draw:deleted', function (e) {
@@ -180,10 +196,14 @@
                         if (_.isEqual(boundriesLayers[layerId]['_latlngs'], layer['_latlngs'])) {
                             delete boundriesLayers[layerId];
                             delete vecBoundries[layerId];
+                            for (let i = 0; i < redDotsMarkers[layerId].length; i++) {
+                                map.removeLayer(redDotsMarkers[layerId][i]);
+                            }
                         }
                     }
                 });
             });
+            toggle();
         }
 
         function toggle() {
@@ -206,8 +226,10 @@
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir);
             }
-            fs.writeFileSync(path.join(dir, `${mapName}_${mapVersion}.json`), JSON.stringify(vecBoundries, null, 2));
+            let stringify = JSON.stringify(vecBoundries, null, 2);
+            fs.writeFileSync(path.join(dir, `${mapName}_${mapVersion}.txt`), stringify.split(`"`).join(""));
             Snackbar.show({ text: `file saved. see output folder`, textColor: '#ffffff', actionTextColor: 'green', pos: 'top-right' });
+            toggle();
         }
 
         function uuidv4() {
@@ -217,6 +239,10 @@
                         v = c == 'x' ? r : (r & 0x3 | 0x8);
                     return v.toString(16);
                 });
+        }
+
+        function exit() {
+            ipcRenderer.send("exit", {});
         }
     </script>
 </body>

@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow ,ipcMain} = require('electron');
 
 let mainWindow;
 
@@ -13,6 +13,7 @@ app.on('ready', () => {
     maxWidth: 1024,
     minHeight: 1024,
     maxHeight: 1024,
+    movable:true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -29,6 +30,10 @@ app.on('ready', () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  ipcMain.on("exit", (e, args)=>{
+    app.exit();
+  })
 });
 
 app.on('window-all-closed', () => {

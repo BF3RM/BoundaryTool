@@ -82,3 +82,30 @@ input::placeholder {
 #minimize:hover{
     background: rgba(0,0,0, .4);
 }
+
+.exit {
+    position: fixed;
+    top:0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    font-size: 24px;
+    background: rgba(0,0,0, .2);
+    color: #ffffff;
+    text-align: center;
+    z-index: 1000;
+    cursor: default;
+    user-select: none;
+}
+
+.exit:hover {
+    background: rgba(0,0,0, .5) !important;  
+}
+
+.red-dot {
+    background-color: red;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+}
