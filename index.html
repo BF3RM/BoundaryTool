@@ -87,7 +87,7 @@
             const mapWidth = document.getElementById("mapWidth").value;
             const centerX = document.getElementById("centerX").value;
             const centerY = document.getElementById("centerY").value;
-            if (!mapName || !mapVersion || !mapWidth || !centerX || !centerY) {
+            if (!mapWidth || !centerX || !centerY) {
                 Snackbar.show({ text: `Missing fields`, textColor: '#ffffff', actionTextColor: 'red', pos: 'top-right' });
                 return;
             };
@@ -99,7 +99,12 @@
             var image;
             const imageUrl = `https://cdn.bf3reality.com/minimap/levels/${mapName.toLowerCase()}_${mapVersion.toLowerCase()}.png`;
             try {
-                image = L.imageOverlay(imageUrl, bounds);
+                if(!mapName || !mapVersion){
+                    image = L.imageOverlay('./lightgreen.jpg', bounds);
+                }
+                else {
+                    image = L.imageOverlay(imageUrl, bounds);
+                }
             }
             catch (err) {
                 Snackbar.show({ text: `invalid path "${imageUrl}"`, textColor: '#ffffff', actionTextColor: 'red', pos: 'top-right' });
