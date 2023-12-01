@@ -35,6 +35,14 @@
         <div style="position: relative;width: 100%;">
             <img src="./back.svg" id="minimize" onclick="toggle()">
         </div>
+        <div style="color: #ffffff;font-weight: bold;text-decoration: underline;">Important: </div>
+        <div style="font-weight: 400;color: #ffffff;">
+            - each polygon must be created clockwise
+        </div>
+        <div style="font-weight: 400;color: #ffffff;">
+            - first draw the team boundaries and then the neutral boundary
+        </div>
+        <div style="color: #ffffff;font-weight: bold;text-decoration: underline;">Setup: </div>
         <div>
             <input style="width: 100%;" id="mapName" type="text" placeholder="Map Name [xp1_001]">
         </div>
@@ -51,9 +59,13 @@
             <input style="width: 50%;" id="centerX" type="text" placeholder="X">
             <input style="width: 50%;" id="centerY" type="text" placeholder="Y">
         </div>
-        <div>
-            <button onclick="generateMap()">Download</button>
-            <button onclick="save()">Save Boundries</button>
+        <div style="display: flex;gap: 10px;">
+            <div style="flex: 50%;">
+                <button style="width: 100%;" onclick="generateMap()">Download Map</button>
+            </div>
+            <div style="flex: 50%;">
+                <button style="width: 100%;" onclick="save()">Save Boundries</button>
+            </div>
         </div>
     </div>
 
@@ -214,12 +226,12 @@
         function toggle() {
             const inputsContainer = document.getElementById("inputs-container");
             const minimize = document.getElementById("minimize");
-            if (inputsContainer.style.left == "-368px") {
+            if (inputsContainer.style.left == '-' + inputsContainer.offsetWidth + "px") {
                 inputsContainer.style.left = '0';
                 minimize.style.transform = "rotate(0)";
             }
             else {
-                inputsContainer.style.left = '-368px';
+                inputsContainer.style.left = '-' + inputsContainer.offsetWidth + "px";
                 minimize.style.transform = "rotate(-180deg)";
             }
         }

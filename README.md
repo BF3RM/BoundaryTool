@@ -1,3 +1,3 @@
 # BoundaryTool
 
-Created by: Ori Buhbut
+Created by Ori Buhbut
